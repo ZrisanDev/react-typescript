@@ -1,23 +1,9 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 
 import "./App.css";
 import List from "./components/List";
 import Form from "./components/Form";
 import { Sub } from "./types";
-
-const INITIAL_STATE = [
-  {
-    nick: "dapelu",
-    subMonths: 2,
-    avatar: "https://i.pravatar.cc/150?u=dapelu",
-    description: "Dapelu hace mmdereador",
-  },
-  {
-    nick: "sergio_serr",
-    subMonths: 4,
-    avatar: "https://i.pravatar.cc/150?u=sergio",
-  },
-];
 
 interface AppState {
   subs: Array<Sub>;
@@ -28,17 +14,19 @@ function App() {
   const [subs, setSubs] = useState<AppState["subs"]>([]);
   const [mewSubsNumber, setNewSubsNumber] =
     useState<AppState["newSubNumber"]>(0);
+  const divRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setSubs(INITIAL_STATE);
-  }, []);
+  const handleNewSub = (newSub: Sub) => {
+    setSubs((subs) => [...subs, newSub]);
+    setNewSubsNumber((n) => n + 1);
+  };
 
   return (
-    <div className="App">
+    <div className="App" ref={divRef}>
       <h1>midu subs</h1>
       <List subs={subs} />
-      <br />
-      <Form />
+      New Subs: {mewSubsNumber}
+      <Form onNewSub={handleNewSub} />
     </div>
   );
 }
